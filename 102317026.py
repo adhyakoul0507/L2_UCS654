@@ -25,7 +25,7 @@ def validate_arguments(args):
     
     singer_name = args[1]
     
-    # Validate number of videos
+    # Val no of videos
     try:
         num_videos = int(args[2])
         if num_videos <= 10:
@@ -34,8 +34,7 @@ def validate_arguments(args):
     except ValueError:
         print("Error: Number of videos must be a valid integer!")
         sys.exit(1)
-    
-    # Validate audio duration
+
     try:
         duration = int(args[3])
         if duration <= 20:
@@ -59,13 +58,13 @@ def download_videos(singer_name, num_videos):
     print(f"Searching for '{singer_name}' videos on YouTube...")
     print(f"{'='*60}\n")
     
-    # Create a temporary directory for downloads
+    #temporary directory for downloads
     download_dir = "temp_downloads"
     if os.path.exists(download_dir):
         shutil.rmtree(download_dir)
     os.makedirs(download_dir)
     
-    # Configure yt-dlp options
+
     ydl_opts = {
         'format': 'bestaudio/best',
         'postprocessors': [{
@@ -83,18 +82,17 @@ def download_videos(singer_name, num_videos):
     
     try:
         with YoutubeDL(ydl_opts) as ydl:
-            # Search for videos and download
+            
             search_query = f"ytsearch{num_videos}:{singer_name}"
             print(f"Downloading {num_videos} videos...")
             ydl.download([search_query])
     except Exception as e:
-        # Check if it's just the "max downloads reached" message
-        # This happens after successful downloads, so we continue
+       
         if "Maximum number of downloads reached" not in str(e):
             print(f"\nError during download: {str(e)}")
             sys.exit(1)
     
-    # Get list of downloaded files
+
     audio_files = [os.path.join(download_dir, f) for f in os.listdir(download_dir)
                   if f.endswith('.mp3')]
     audio_files.sort()
@@ -122,10 +120,9 @@ def cut_audio(audio_files, duration):
         try:
             print(f"Processing file {i}/{len(audio_files)}: {os.path.basename(audio_file)}")
             
-            # Load audio file
             audio = AudioSegment.from_mp3(audio_file)
             
-            # Cut first Y seconds (duration is in seconds, pydub uses milliseconds)
+            
             cut_duration_ms = duration * 1000
             
             if len(audio) < cut_duration_ms:
@@ -134,7 +131,7 @@ def cut_audio(audio_files, duration):
             else:
                 cut_audio = audio[:cut_duration_ms]
             
-            # Save cut audio
+            
             cut_file = audio_file.replace('.mp3', '_cut.mp3')
             cut_audio.export(cut_file, format='mp3')
             cut_files.append(cut_file)
@@ -158,21 +155,21 @@ def merge_audio(cut_files, output_file):
     print(f"{'='*60}\n")
     
     try:
-        # Start with an empty audio segment
+        
         merged_audio = AudioSegment.empty()
         
-        # Merge all cut audio files
+        
         for i, cut_file in enumerate(cut_files, 1):
             print(f"Adding file {i}/{len(cut_files)} to mashup...")
             audio = AudioSegment.from_mp3(cut_file)
             merged_audio += audio
         
-        # Export the merged audio
+        
         print(f"\nExporting final mashup...")
         merged_audio.export(output_file, format='mp3')
         
-        # Get file size
-        file_size = os.path.getsize(output_file) / (1024 * 1024)  # Convert to MB
+        
+        file_size = os.path.getsize(output_file) / (1024 * 1024)  
         duration_seconds = len(merged_audio) / 1000
         
         print(f"\n{'='*60}")
@@ -205,7 +202,7 @@ def main():
     print(" "*15 + "YOUTUBE MASHUP CREATOR")
     print("="*60)
     
-    # Validate arguments
+    
     singer_name, num_videos, duration, output_file = validate_arguments(sys.argv)
     
     print(f"\nConfiguration:")
@@ -215,19 +212,19 @@ def main():
     print(f"  Output file: {output_file}")
     
     try:
-        # Step 1: Download videos
+        
         audio_files = download_videos(singer_name, num_videos)
         
-        # Step 2: Cut audio to specified duration
+        
         cut_files = cut_audio(audio_files, duration)
         
-        # Step 3: Merge all audio files
+        
         merge_audio(cut_files, output_file)
         
-        # Step 4: Cleanup
+        
         cleanup()
         
-        print("\n🎵 All done! Enjoy your mashup! 🎵\n")
+        print("\n All done! Enjoy your mashup! \n")
         
     except KeyboardInterrupt:
         print("\n\nProcess interrupted by user. Cleaning up...")
