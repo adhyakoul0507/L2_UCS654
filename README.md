@@ -7,20 +7,6 @@ It consists of:
 - Program 1 – Command Line Mashup Generator
 - Program 2 – Web-Based Mashup Service (Deployed on Render)
 
----
-
-# 📁 Project Structure
-L2_UCS654/
-│
-├── 102317026.py # Program 1 (Command Line)
-├── app.py # Program 2 (Web App)
-├── templates/
-│ └── index.html # Web UI
-├── requirements.txt
-├── render.yaml
-├── .python-version
-└── README.md
----
 
 # Program 1 – Command Line Mashup
 
@@ -50,7 +36,7 @@ python 102317026.py "Sharry Maan" 20 30 output.mp3
 
 ---
 
-## 🔹 Conditions Checked
+## Conditions Checked
 
 - Number of parameters
 - Number of videos must be > 10
