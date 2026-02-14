@@ -1,86 +1,148 @@
-# YouTube Mashup Generator
+# YouTube Mashup Creator
 
-This project is developed as part of the UCS654 Lab Assignment.
+A Python application that creates mashups from YouTube videos. Available as both a command-line tool and a web service.
 
-It consists of:
+## Features
 
-- Program 1 – Command Line Mashup Generator
-- Program 2 – Web-Based Mashup Service (Deployed on Render)
+### Program 1: Command Line Interface
+- Download N videos from YouTube for any singer
+- Convert videos to audio (MP3)
+- Cut first Y seconds from each audio
+- Merge all clips into a single mashup file
+- Comprehensive error handling and validation
 
+### Program 2: Web Service
+- User-friendly web interface
+- Email delivery of mashup files
+- Background processing
+- Real-time validation
+- Beautiful, responsive design
 
-# Program 1 – Command Line Mashup
+## Installation
 
-## Description
+### Prerequisites
+- Python 3.8 or higher
+- FFmpeg (required for audio processing)
 
-This program:
+### Install FFmpeg
 
-1. Downloads N videos of a singer from YouTube  
-2. Converts them to audio  
-3. Cuts first Y seconds from each  
-4. Merges all audio clips into one mashup file  
+**On Ubuntu/Debian:**
+```bash
+sudo apt update
+sudo apt install ffmpeg
+```
 
-Uses Python packages from PyPI:
-- yt-dlp
-- pydub
+**On macOS:**
+```bash
+brew install ffmpeg
+```
 
----
+**On Windows:**
+Download from [FFmpeg official website](https://ffmpeg.org/download.html) and add to PATH.
 
-## How to Run
+### Install Python Dependencies
 
-python 102317026.py "Singer Name" NumberOfVideos Duration OutputFileName.mp3
+```bash
+pip install -r requirements.txt --break-system-packages
+```
 
-### Example:
+Or install individually:
+```bash
+pip install yt-dlp pydub flask flask-mail --break-system-packages
+```
 
-python 102317026.py "Sharry Maan" 20 30 output.mp3
+## usage
 
+### Program 1: Command Line
 
----
+**Basic Usage:**
+```bash
+python 102317026.py <SingerName> <NumberOfVideos> <AudioDuration> <OutputFileName>
+```
 
-## Conditions Checked
+**Example:**
+```bash
+python 102317026.py "Sharry Maan" 20 20 101556-output.mp3
+```
 
-- Number of parameters
-- Number of videos must be > 10
-- Duration must be > 20 seconds
-- Handles invalid input and exceptions
+**Parameters:**
+- `SingerName`: Name of the singer/artist (use quotes for multi-word names)
+- `NumberOfVideos`: Number of videos to download (must be > 10)
+- `AudioDuration`: Duration in seconds to cut from each video (must be > 20)
+- `OutputFileName`: Name of the output mashup file
 
----
+**Examples:**
+```bash
+# Create a 20-video mashup with 30-second clips
+python 102317026.py "Arijit Singh" 20 30 arijit-mashup.mp3
 
-# Program 2 – Web Application
+```
 
-## Description
+### Program 2: Web Service
 
-The web app allows user to:
+**Start the Server:**
+```bash
+python app.py
+```
 
-- Enter Singer Name
-- Enter Number of Videos (>10)
-- Enter Duration (>20 seconds)
-- Enter Email ID
+**Access the Web Interface:**
+Open your browser and navigate to:
+```
+http://localhost:5000
+```
 
-The system:
+**Configure Email Settings:**
 
-- Generates mashup
-- Compresses output file
-- Sends result via email (ZIP format)
+Before running the web service, update the email configuration in `app.py`:
 
----
+```python
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'your-email@gmail.com'  # Your email
+app.config['MAIL_PASSWORD'] = 'your-app-password'      # Your app password
+app.config['MAIL_DEFAULT_SENDER'] = 'your-email@gmail.com'
+```
 
-##  Live Deployment
+**For Gmail:**
+1. Enable 2-factor authentication
+2. Generate an App Password (Google Account Settings → Security → App Passwords)
+3. Use the app password in the configuration
 
-Web App Link:
-https://l2-ucs654.onrender.com
+##  File Structure
 
----
+```
+.
+├── 102317026.py              # Commandline program
+├── app.py                 # Web service 
+├── templates/
+│   └── index.html        # Web int template
+├── requirements.txt       # Python dependencies
+└── README.md             # This file
+```
 
-# Technologies Used
+## How It Works
 
-- Python 3.11
-- Flask
-- yt-dlp
-- pydub
-- gunicorn
-- Render (Deployment)
+### Command Line Program Flow:
+1. **Validation**: Checks all input parameters
+2. **Download**: Searches YouTube and downloads N videos
+3. **Convert**: Extracts audio and converts to MP3
+4. **Cut**: Trims each audio to Y seconds
+5. **Merge**: Combines all clips into one file
+6. **Cleanup**: Removes temporary files
 
+### Web Service Flow:
+1. **User Input**: Web form with validation
+2. **Background Processing**: Runs mashup creation in separate thread
+3. **Email**: Sends completed mashup to user's email
+4. **Auto-cleanup**: Removes files after sending
 
+## Error Handling
 
-
+Both programs include comprehensive error handling for:
+- Invalid parameters (wrong types, out of range values)
+- Network errors during download
+- Audio processing errors
+- File system errors
+- Email sending failures (web service)
 

@@ -1,0 +1,4 @@
+yt-dlp>=2024.1.0
+pydub>=0.25.1
+flask>=3.0.0
+flask-mail>=0.9.1

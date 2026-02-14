@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Mashup Creator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: #e8dcc4;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(139, 119, 101, 0.03) 2px, rgba(139, 119, 101, 0.03) 4px);
+        }
+
+        .container {
+            background: #f5f0e8;
+            border: 3px solid #8b7765;
+            max-width: 650px;
+            width: 100%;
+            padding: 50px 45px;
+            box-shadow:
+                0 0 0 1px #8b7765,
+                8px 8px 0 0 rgba(139, 119, 101, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #8b7765;
+            padding-bottom: 25px;
+        }
+
+        .header h1 {
+            color: #3d2f24;
+            font-size: 36px;
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #6b5d52;
+            font-size: 15px;
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+
+        .divider {
+            width: 60px;
+            height: 2px;
+            background: #8b7765;
+            margin: 15px auto;
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #3d2f24;
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #8b7765;
+            background: #fdfbf7;
+            font-size: 15px;
+            font-family: 'Georgia', serif;
+            color: #3d2f24;
+            transition: all 0.2s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="email"]:focus {
+            outline: none;
+            border-color: #3d2f24;
+            background: #ffffff;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #8b7765;
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: #3d2f24;
+            color: #f5f0e8;
+            border: 2px solid #3d2f24;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            font-family: 'Georgia', serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .submit-btn:hover {
+            background: #f5f0e8;
+            color: #3d2f24;
+        }
+
+        .submit-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: none;
+        }
+
+        .submit-btn:disabled {
+            background: #b8a896;
+            border-color: #b8a896;
+            cursor: not-allowed;
+            color: #e8dcc4;
+        }
+
+        .message {
+            padding: 18px;
+            margin-bottom: 25px;
+            display: none;
+            border: 2px solid;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .message.success {
+            background: #e8f4e8;
+            color: #2d5016;
+            border-color: #5a8a3a;
+        }
+
+        .message.error {
+            background: #f4e8e8;
+            color: #6b2d2d;
+            border-color: #a85a5a;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 25px;
+            padding: 30px;
+            border: 2px solid #8b7765;
+            background: #fdfbf7;
+        }
+
+        .spinner {
+            border: 3px solid #e8dcc4;
+            border-top: 3px solid #3d2f24;
+            width: 45px;
+            height: 45px;
+            animation: spin 1.2s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #3d2f24;
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .info-box {
+            background: #fdfbf7;
+            border: 2px solid #8b7765;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-box h3 {
+            color: #3d2f24;
+            margin-bottom: 12px;
+            font-size: 16px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .info-box ul {
+            margin-left: 25px;
+            color: #3d2f24;
+        }
+
+        .info-box li {
+            margin-bottom: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .ornament {
+            text-align: center;
+            color: #8b7765;
+            font-size: 20px;
+            margin: 20px 0;
+            letter-spacing: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 25px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .submit-btn {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Mashup Creator</h1>
+            <div class="divider"></div>
+            <p>A Classic Approach to Modern Music</p>
+        </div>
+
+        <div class="ornament">❖ ❖ ❖</div>
+
+        <div class="info-box">
+            <h3>Instructions</h3>
+            <ul>
+                <li>Enter the name of your preferred musical artist</li>
+                <li>Select quantity of videos to include (minimum: 11)</li>
+                <li>Specify duration for each segment (minimum: 21 seconds)</li>
+                <li>Provide electronic mail address for delivery</li>
+            </ul>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <form id="mashup-form">
+            <div class="form-group">
+                <label for="singer_name">Artist Name</label>
+                <input
+                    type="text"
+                    id="singer_name"
+                    name="singer_name"
+                    placeholder="e.g., Sharry Maan, Arijit Singh"
+                    required
+                >
+                <div class="hint">Full name of the musical performer</div>
+            </div>
+
+            <div class="form-group">
+                <label for="num_videos">Number of Videos</label>
+                <input
+                    type="number"
+                    id="num_videos"
+                    name="num_videos"
+                    min="11"
+                    placeholder="e.g., 20"
+                    required
+                >
+                <div class="hint">Must exceed ten (10) videos</div>
+            </div>
+
+            <div class="form-group">
+                <label for="duration">Duration (Seconds)</label>
+                <input
+                    type="number"
+                    id="duration"
+                    name="duration"
+                    min="21"
+                    placeholder="e.g., 30"
+                    required
+                >
+                <div class="hint">Must exceed twenty (20) seconds per segment</div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Electronic Mail</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="your.address@example.com"
+                    required
+                >
+                <div class="hint">Delivery address for completed mashup</div>
+            </div>
+
+            <div class="ornament">❖ ❖ ❖</div>
+
+            <button type="submit" class="submit-btn" id="submit-btn">
+                Create Mashup
+            </button>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div class="loading-text">PROCESSING YOUR REQUEST</div>
+            <div class="hint" style="margin-top: 10px;">This may require several minutes</div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('mashup-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const messageDiv = document.getElementById('message');
+        const loadingDiv = document.getElementById('loading');
+
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 8000);
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const numVideos = parseInt(formData.get('num_videos'));
+            const duration = parseInt(formData.get('duration'));
+
+            if (numVideos <= 10) {
+                showMessage('Number of videos must exceed ten (10)', 'error');
+                return;
+            }
+
+            if (duration <= 20) {
+                showMessage('Duration must exceed twenty (20) seconds', 'error');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            loadingDiv.style.display = 'block';
+            form.style.display = 'none';
+
+            try {
+                const response = await fetch('/create-mashup', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage(data.message, 'success');
+                    form.reset();
+                } else {
+                    showMessage(`Error: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showMessage('An error occurred. Please try again later.', 'error');
+                console.error('Error:', error);
+            } finally {
+                submitBtn.disabled = false;
+                loadingDiv.style.display = 'none';
+                form.style.display = 'block';
+            }
+        });
+
+        document.getElementById('num_videos').addEventListener('input', function() {
+            if (this.value && parseInt(this.value) <= 10) {
+                this.setCustomValidity('Number of videos must exceed ten (10)');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+
+        document.getElementById('duration').addEventListener('input', function() {
+            if (this.value && parseInt(this.value) <= 20) {
+                this.setCustomValidity('Duration must exceed twenty (20) seconds');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    </script>
+</body>
+</html>
